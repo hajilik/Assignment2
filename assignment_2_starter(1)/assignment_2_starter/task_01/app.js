@@ -6,6 +6,8 @@ let eye = [0, 0, 0.1];
 let at = [0, 0, 0];
 let up = [0, 1, 0];
 
+
+
 // Add variables to keep track of camera view
 let viewMode = 'default';
 
@@ -130,7 +132,24 @@ function handleKeyDown(event) {
         viewMode = 'left';
     } else if (event.key === 'F' || event.key === 'f') {
         viewMode = 'front';
+    } else if (event.key === 'D' || event.key === 'd') {
+        rotateCameraClockwise(1);
+    } else if (event.key === 'A' || event.key === 'a') {
+        rotateCameraClockwise(-1);
     } else {
         viewMode = 'default';
     }
 }
+
+function rotateCameraClockwise(theta) {
+    let cosTheta = Math.cos(theta);
+    let sinTheta = Math.sin(theta);
+
+    let newUp0 = up[0] * cosTheta - up[1] * sinTheta;
+    let newUp1 = up[0] * sinTheta + up[1] * cosTheta;
+    let newUp2 = up[2];
+
+    up = vec3(newUp0, newUp1, newUp2);
+}
+
+
