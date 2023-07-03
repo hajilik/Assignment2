@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Assignment 2</title>
+  <script type="notjs" id="vertex-shader">
+    attribute vec4 vPosition;
+    attribute vec4 vColor;
+    varying vec4 fColor;
+    uniform mat4 modelViewMatrix;
+    uniform mat4 projectionMatrix;
+    void main(void) {
+      fColor = vColor;
+      gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+    }
+  </script>
+  <script type="notjs" id="fragment-shader">
+    precision mediump float;
+    varying vec4 fColor;
+    void main(void) {
+      gl_FragColor = fColor;
+    }
+  </script>
+  <script src="../_common/webgl-utils.js"></script>
+  <script src="../_common/initShaders.js"></script>
+  <script src="../_common/MV.js"></script>
+  <script src="app.js"></script>
+</head>
+<body>
+  <canvas id="webgl-canvas" width="400" height="300"></canvas>
+  <script>
+    let canvas = document.getElementById("webgl-canvas");
+    canvas.addEventListener('keypress', handleKeyPress);
+  </script>
+</body>
+</html>
