@@ -7,8 +7,8 @@ let eye = [2, 2, 2];
 let at = [0, 0, 0];
 let up = [0, 1, 0];
 
-// Define the clipping volume parameters
-let fovy = 45; // Field of view in degrees
+// Clipping volume parameters
+let fovy = 45; // Field of view
 let aspect = 1; // Aspect ratio of the canvas
 let near = 0.1; // Near clipping plane
 let far = 10; // Far clipping plane

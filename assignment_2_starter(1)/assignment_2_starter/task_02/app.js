@@ -7,7 +7,7 @@ let eye = [0, 0, 0.1];
 let at = [0, 0, 0];
 let up = [0, 1, 0];
 
-// Define the clipping volume parameters
+// Clipping volume parameters
 let left = -2;
 let right = 2;
 let bottom = -2;
