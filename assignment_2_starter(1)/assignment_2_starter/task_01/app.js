@@ -2,14 +2,12 @@ let gl, program;
 let vertexCount = 36;
 let modelViewMatrix;
 
-let eye = [0, 0, 0.1];
+let eye = [0, 0, 0];
 let at = [0, 0, 0];
 let up = [0, 1, 0];
 
 
-
-// Add variables to keep track of camera view
-let viewMode = 'default';
+let mvm = lookAt(eye, at, up);
 
 window.onload = () => {
     let canvas = document.getElementById("webgl-canvas");
@@ -26,6 +24,7 @@ window.onload = () => {
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     gl.enable(gl.DEPTH_TEST);
+    window.addEventListener('keydown', handleKeyDown);
 
     gl.clearColor(0, 0, 0, 0.5);
 
@@ -98,25 +97,6 @@ window.onload = () => {
 function render() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    let mvm;
-
-    // Update model-view matrix based on the view mode
-    if (viewMode === 'default') {
-        mvm = lookAt(eye, at, up);
-    } else if (viewMode === 'top') {
-        eye = [0, 1, 0.1];
-        at = [0, 0, 0];
-        mvm = lookAt(eye, at, up);
-    } else if (viewMode === 'left') {
-        eye = [-1, 0, 0.1];
-        at = [0, 0, 0];
-        mvm = lookAt(eye, at, up);
-    } else if (viewMode === 'front') {
-        eye = [0, 0, 1];
-        at = [0, 0, 0];
-        mvm = lookAt(eye, at, up);
-    }
-
     gl.uniformMatrix4fv(modelViewMatrix, false, flatten(mvm));
 
     gl.drawElements(gl.TRIANGLES, vertexCount, gl.UNSIGNED_BYTE, 0);
@@ -127,29 +107,46 @@ function render() {
 // Handle keyboard events
 function handleKeyDown(event) {
     if (event.key === 'T' || event.key === 't') {
-        viewMode = 'top';
+        eye = [0, 1, 0];
+        up = [0, 0, 1];
+        mvm = lookAt(eye, at, up);
     } else if (event.key === 'L' || event.key === 'l') {
-        viewMode = 'left';
+        eye = [-1, 0, 0];
+        up = [0, 1, 0];
+        mvm = lookAt(eye, at, up);
     } else if (event.key === 'F' || event.key === 'f') {
-        viewMode = 'front';
+        eye = [0, 0, 0.1];
+        up = [0, 1, 0];
+        mvm = lookAt(eye, at, up);
     } else if (event.key === 'D' || event.key === 'd') {
-        rotateCameraClockwise(1);
+        rotateCameraClockwise(0.2);
+        mvm = lookAt(eye, at, up);
     } else if (event.key === 'A' || event.key === 'a') {
-        rotateCameraClockwise(-1);
-    } else {
-        viewMode = 'default';
+        rotateCameraClockwise(-0.2);
+        mvm = lookAt(eye, at, up);
     }
 }
+
+
 
 function rotateCameraClockwise(theta) {
     let cosTheta = Math.cos(theta);
     let sinTheta = Math.sin(theta);
+    if(eye[0] === 0 && eye[1] === 1 && eye[2] === 0){
+        let up0 = up[0] * cosTheta + up[2] * sinTheta;
+        let up2 = -up[0] * sinTheta + up[2] * cosTheta;
+        let up1 = up[1];
+        up = [up0, up1, up2];  
+    }else if(eye[0] === -1 && eye[1] === 0 && eye[2] === 0){
+        let up2 = up[2] * cosTheta - up[1] * sinTheta;
+        let up1 = up[2] * sinTheta + up[1] * cosTheta;
+        let up0 = up[0];
+        up = [up0, up1, up2];
+    }else{
+        let up0 = up[0] * cosTheta - up[1] * sinTheta;
+        let up1 = up[0] * sinTheta + up[1] * cosTheta;
+        let up2 = up[2];
+        up = [up0, up1, up2];
+    }
 
-    let newUp0 = up[0] * cosTheta - up[1] * sinTheta;
-    let newUp1 = up[0] * sinTheta + up[1] * cosTheta;
-    let newUp2 = up[2];
-
-    up = vec3(newUp0, newUp1, newUp2);
 }
-
-

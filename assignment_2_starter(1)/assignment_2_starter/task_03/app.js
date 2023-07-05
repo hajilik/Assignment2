@@ -3,12 +3,12 @@ let vertexCount = 36;
 let modelViewMatrix;
 let projectionMatrix;
 
-let eye = [0, 0, 0.1];
+let eye = [2, 2, 2];
 let at = [0, 0, 0];
 let up = [0, 1, 0];
 
 // Define the clipping volume parameters
-let fovy = 60; // Field of view in degrees
+let fovy = 45; // Field of view in degrees
 let aspect = 1; // Aspect ratio of the canvas
 let near = 0.1; // Near clipping plane
 let far = 10; // Far clipping plane
@@ -67,7 +67,7 @@ window.onload = () => {
         1, 1, 0,
         1, 1, 1,
     ];
-    
+    vertices = scale(0.5, vertices)
     let vBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
@@ -111,27 +111,14 @@ function render() {
 }
 
 function handleKeyDown(event) {
-    if (event.key === 'T' || event.key === 't') {
-        eye = [0, 1, 0.1];
-        at = [0, 0, 0];
-    } else if (event.key === 'L' || event.key === 'l') {
-        eye = [-1, 0, 0.1];
-        at = [0, 0, 0];
-    } else if (event.key === 'F' || event.key === 'f') {
-        eye = [0, 0, 1];
-        at = [0, 0, 0];
-    } else if (event.key === 'D' || event.key === 'd') {
+    if (event.key === 'D' || event.key === 'd') {
         rotateCameraClockwise(1);
     } else if (event.key === 'A' || event.key === 'a') {
         rotateCameraClockwise(-1);
-    } else if (event.key === 'I' || event.key === 'i') {
-        eye = [3, 2, 2];
-        at = [0, 0, 0];
-        up = [0, 1, 0]
     } else if (event.key === 'W' || event.key === 'w') {
-        scaleScene(1.05);
+        scaleScene(1.01);
     } else if (event.key === 'S' || event.key === 's') {
-        scaleScene(0.95);
+        scaleScene(0.99);
     }
 
     render();
