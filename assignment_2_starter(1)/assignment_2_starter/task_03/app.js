@@ -67,7 +67,7 @@ window.onload = () => {
         1, 1, 0,
         1, 1, 1,
     ];
-    vertices = scale(0.5, vertices)
+    
     let vBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
@@ -112,13 +112,13 @@ function render() {
 
 function handleKeyDown(event) {
     if (event.key === 'D' || event.key === 'd') {
-        rotateCameraClockwise(1);
+        rotateCameraClockwise(0.1);
     } else if (event.key === 'A' || event.key === 'a') {
         rotateCameraClockwise(-1);
     } else if (event.key === 'W' || event.key === 'w') {
-        scaleScene(1.01);
+        scaleScene(5);
     } else if (event.key === 'S' || event.key === 's') {
-        scaleScene(0.99);
+        scaleScene(-5);
     }
 
     render();
@@ -138,10 +138,9 @@ function rotateCameraClockwise(theta) {
 }
 
 function scaleScene(factor) {
-    fovy *= factor;
-    aspect *= factor;
-    near *= factor;
-    far *= factor;
+    fovy += factor;
+
+
 
     render();
 }
